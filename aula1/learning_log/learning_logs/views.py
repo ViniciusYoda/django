@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from .forms import TopicForm
+from .forms import TopicForm, EntryForm
 from .models import Topic
 
 def index(request):
@@ -36,3 +36,23 @@ def new_topic(request):
     # Exibe um formulário em branco ou exibe mensagens de erro
     context = {'form': form}
     return render(request, 'learning_logs/new_topic.html', context)
+
+def new_entry(request, topic_id):
+    """Adiciona uma nova entrada para um tópico específico"""
+    topic = Topic.objects.get(id=topic_id)
+
+    if request.method != 'POST':
+        # Nenhum dado foi enviado; cria um formulário em branco
+        form = EntryForm()
+    else:
+        # Dados foram enviados; processa os dados
+        form = EntryForm(data=request.POST)
+        if form.is_valid():
+            new_entry = form.save(commit=False)
+            new_entry.topic = topic
+            new_entry.save()
+            return HttpResponseRedirect(reverse('topic', args=[topic_id]))
+
+    # Exibe um formulário em branco ou exibe mensagens de erro
+    context = {'topic': topic, 'form': form}
+    return render(request, 'learning_logs/new_entry.html', context)
