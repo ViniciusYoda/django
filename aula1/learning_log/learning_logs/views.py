@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from .forms import TopicForm, EntryForm
-from .models import Topic
+from .models import Topic, Entry
 
 def index(request):
     """Página principal do Learning_log"""
@@ -56,3 +56,22 @@ def new_entry(request, topic_id):
     # Exibe um formulário em branco ou exibe mensagens de erro
     context = {'topic': topic, 'form': form}
     return render(request, 'learning_logs/new_entry.html', context)
+
+def edit_entry(request, entry_id):
+    """Edita uma entrada existente"""
+    entry = Entry.objects.get(id=entry_id)
+    topic = entry.topic
+
+    if request.method != 'POST':
+        # Solicitação inicial; preenche o formulário com os dados atuais
+        form = EntryForm(instance=entry)
+    else:
+        # Dados foram enviados; processa os dados
+        form = EntryForm(instance=entry, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('topic', args=[topic.id]))
+
+    # Exibe um formulário em branco ou exibe mensagens de erro
+    context = {'entry': entry, 'topic': topic, 'form': form}
+    return render(request, 'learning_logs/edit_entry.html', context)
