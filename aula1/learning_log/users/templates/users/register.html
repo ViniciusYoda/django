@@ -1,13 +1,27 @@
 {% extends "learning_logs/base.html" %} 
+{% load bootstrap3 %}
+
+{% block header %}
+  <h1>Criar uma conta</h1>
+{% endblock header %}
 
 {% block content %} 
+ {% if form.errors %}
+<p class="error" style="color: red;">O nome de usuário deve ter entre 3 e 150 caracteres.</p>
+<p class="error"  style="color: red;">A senha deve ter mais que 8</p>
+<p class="error"  style="color: red;">O nome de usuário e a senha não podem conter espaços em branco.</p>
+<p class="error"  style="color: red;">O nome de usuário não pode conter caracteres especiais.</p>
+ {% endif %}
 
-
-
-<form action="{% url 'register' %}" method="post">
+<form action="{% url 'register' %}" method="post" class="ul-none form">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Registrar</button>
+  {% bootstrap_form form %}
+
+  {% buttons %}
+  <button type="submit" class="btn btn-primary">Registrar</button>
+  {% endbuttons %}
   <input type="hidden" name="next" value="{% url 'index' %}" />
 </form>
+
+
 {% endblock content %}

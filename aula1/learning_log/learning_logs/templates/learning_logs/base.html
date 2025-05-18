@@ -7,6 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Learning Logs</title>
     {% bootstrap_css %} {% bootstrap_javascript %}
+    <style>
+      .ul-none ul {
+        display: none;
+      }
+
+      .help-block {
+        display: none;
+      }
+
+ 
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-default navbar-static-top">
@@ -27,7 +38,7 @@
             <li><a href="{% url 'topics' %}">Tópicos</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            {% if user.is_authenticated %} 
+            {% if user.is_authenticated %}
             <li><a>Olá, {{ user.username }}</a></li>
             <li><a href="{% url 'logout' %}">Sair</a></li>
             {% else %}
@@ -38,7 +49,9 @@
         </div>
       </div>
     </nav>
+    <div class="container">
+      <div class="page-header">{% block header %}{% endblock header%}</div>
+      <div>{% block content %}{% endblock content %}</div>
+    </div>
   </body>
 </html>
-
-{% block content %}{% endblock %}
