@@ -1,13 +1,44 @@
-<p>
-    <a href="{% url 'index' %}">Learning Logs</a>
-    <a href="{% url 'topics' %}">Tópicos</a>
-    {% if user.is_authenticated %}
-        Olá, {{ user.username }}
-        <a href="{% url 'logout' %}">Sair</a>
-    {% else %}
-        <a href="{% url 'register' %}">Registrar</a>
-        <a href="{% url 'login' %}">Entrar</a>
-    {% endif %}
-</p>
+{% load bootstrap3 %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Logs</title>
+    {% bootstrap_css %} {% bootstrap_javascript %}
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button
+            type="button"
+            class="navbar-toggle collapsed"
+            data-toggle="collapse"
+            data-target="#navbar"
+            aria-expanded="false"
+          ></button>
+          <a class="navbar-brand" href="{% url 'index' %}">Learning Logs</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar">
+          <ul class="nav navbar-nav">
+            <li><a href="{% url 'topics' %}">Tópicos</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %} 
+            <li><a>Olá, {{ user.username }}</a></li>
+            <li><a href="{% url 'logout' %}">Sair</a></li>
+            {% else %}
+            <li><a href="{% url 'register' %}">Registrar</a></li>
+            <li><a href="{% url 'login' %}">Entrar</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>
 
 {% block content %}{% endblock %}
